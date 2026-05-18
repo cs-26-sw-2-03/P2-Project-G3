@@ -14,6 +14,10 @@ import { GetSudokuBoard } from "./backEnd/sudokuBoard.js";
 
 import { solveSudoku } from "./backEnd/solveSudoku.js";
 
+import { sudokuLevel } from "./backEnd/proficiencyScoreCalc.js";
+
+const TOTAL_BOARDS = 344;
+
 // Resolve __dirname for ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -64,6 +68,12 @@ app.get(`${BASE_PATH}/api/score`, (req, res) => {
 // API endpoint to change proficiency score when forfeiting
 app.get(`${BASE_PATH}/api/forfeitScore`, (req, res) => {
     const data = forfeitScore();
+    res.json({ data });
+});
+
+// API endpoint to get sudoku level (decide board number)
+app.get(`${BASE_PATH}/api/sudokuLevel`, (req, res) => {
+    const data = sudokuLevel(TOTAL_BOARDS);
     res.json({ data });
 });
         

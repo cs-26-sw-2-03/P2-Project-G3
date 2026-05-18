@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { sudokuLevel } from "./ProficiencyScoreCalc.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,36 +15,32 @@ export function GetSudokuBoard(sudokuNumber) {
         return;
     }
 
-    const puzzles = csv.split(",");
+    const rows = csv.trim().split("\n");
+    const dataRows = rows.slice(1);
 
     let stringArr = [];
     let j = 0;
 
-    for (var i = 0; i <= puzzles.length; i++) {
+    for (let row of dataRows) {
+        const cols = row.split(",");
 
-        let difArr = [puzzles[7 + i * 4]]
+        const puzzle = cols[1];
+        const difficulty = Number(cols[3])
+        
+        if (puzzle) {
+            stringArr.push([difficulty, puzzle]);
+        }
 
-        j = puzzles[5 + i * 4]
-
-        difArr.push(j)
-
-        stringArr.push(difArr)
     }
 
     //finds the last defined index in the array
-    for (var l = 0; l < stringArr.length; l++) {
-        if (stringArr[l][0] == undefined) {
-            console.log(l)
-            console.log(stringArr[l][0])
-            l--;
-            break;
-        }
-    }
+    let l = stringArr.length - 1;
 
     //sorts the array by difficulty
     mergeSort(stringArr, 0, l)
 
-    const sudokuString = stringArr[sudokuLevel(l)][1];
+    const index = Math.max(0, Math.min(sudokuNumber, l));
+    const sudokuString = stringArr[index][1];
 
     return stringToBoard(sudokuString);
 }

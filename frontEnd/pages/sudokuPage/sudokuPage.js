@@ -90,7 +90,14 @@ async function updateStrategyPopup() {
 
 //getProficiency(err, time);
 
-let sudokuNumber = 300;
+async function getSudokuNumber() {
+    const res = await fetch("/api/sudokuLevel");
+    const data = await res.json();
+    return data.data;
+}
+
+let sudokuNumber = await getSudokuNumber();
+
 const { boardData, solvedSudoku } = await loadSudokuBoard(sudokuNumber);
 
 /**

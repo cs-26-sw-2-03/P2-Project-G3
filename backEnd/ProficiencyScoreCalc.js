@@ -48,17 +48,13 @@ export function profScoreCalc(err, time) {
  * @returns {string}
  */
 export function sudokuLevel(stringAmount) {
-    let stringNumber = 0;
+    let stringNumber = Math.floor(stringAmount * userScore / 10);
 
-    //
-    stringNumber = Math.max(Math.min(
-        Math.floor(stringAmount * userScore / 10),
-        stringAmount - 5), 5);
-
-    //Randomises the given sudoku between the closest 10 sudokus
-    stringNumber = Math.min(Math.round(
-        stringNumber + (5 - Math.random() * 10)
-    ), stringAmount);
+    // Never below 0, never above string amount - 1
+    // Gives +- 5 randomness
+    stringNumber = Math.max(0,
+        Math.min(Math.round(stringNumber+(5 - Math.random() * 10)),
+        stringAmount - 1));
 
     console.log("selected sudoku", stringNumber, "as given sudoku")
 
