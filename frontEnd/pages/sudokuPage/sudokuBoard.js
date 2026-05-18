@@ -6,7 +6,7 @@ export class SudokuCell {
     constructor(number, lockedState, rowIndex, columnIndex) {
         this.number = number; // Int, the number in the given cell or "null"
         this.locked = lockedState; // Bool, is this number permanent?
-        this.candidateBlock = null,
+        this.candidateBlock = null;
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
         this.isTargetCell = false;
@@ -96,6 +96,71 @@ export class SudokuBoard {
         sudokuCell.candidateBlock.centerNotation.centerCandidates = [];
     }
 
+    getHighlightedCandidates(number, sudokuCell) { 
+        const highlightedCells = [];
+
+        let columnIndex = sudokuCell.columnIndex;
+        let rowIndex = sudokuCell.rowIndex;
+        for (let i = 0; i <= 8; i++) {
+            highlightedCells.push(this.sudokuCells[i][columnIndex]);
+            highlightedCells.push(this.sudokuCells[rowIndex][i]);
+        }
+
+        const blockIndices = findSameBlockInstances(rowIndex, columnIndex, this.sudokuCells);
+
+        for (let i = 0; i < blockIndices.length; i++) {
+            const { row, column } = indexToRowAndColumn(blockIndices[i]);
+            highlightedCells.push(this.sudokuCells[row][column]);
+        }
+        
+        return highlightedCells;
+    }
+
+    removeCandidateFromHighlightedCandidateBlocks(highlightedCells, number) {
+        highlightedCells.forEach((highlightedCell) => {
+            
+            if (highlightedCell.candidateBlock && !highlightedCell.locked) {
+                this.removeCandidate(number, highlightedCell.candidateBlock);
+            }
+        })
+    }
+
+    removeCandidate(number, candidateBlock) {
+        const cornerNotation = candidateBlock.cornerNotation;
+
+        let index = cornerNotation?.topCornerCandidates?.findIndex(
+            candidate => candidate == number
+        );
+
+        if (index !== undefined && index !== -1) {
+            cornerNotation.topCornerCandidates.splice(index, 1);
+        }
+
+        index = cornerNotation?.bottomCornerCandidates?.findIndex(
+            candidate => candidate == number
+        );
+
+        if (index !== undefined && index !== -1) {
+            cornerNotation.bottomCornerCandidates.splice(index, 1);
+        }
+
+        const centerNotation = candidateBlock.centerNotation;
+
+        index = centerNotation?.centerCandidates?.findIndex(
+            candidate => candidate == number
+        );
+
+        if (index !== undefined && index !== -1) {
+            centerNotation.centerCandidates.splice(index, 1);
+        }
+    }
+
+    automaticCandidateHandling(number, sudokuCell) {
+        const highlightedCells = this.getHighlightedCandidates(number, sudokuCell);
+        
+        this.removeCandidateFromHighlightedCandidateBlocks(highlightedCells, number);
+    }
+
     /**
      * This function inserts a given number in a given cell, as long as the number is valid and the cell is selected and not locked.
      * @param {*} sudokuCell The given cell.
@@ -107,6 +172,7 @@ export class SudokuBoard {
         if (!this.misplacedNumberInBoard()) this.clearErrorTrackingProperties();
         this.updateErrorState(sudokuCell, number);
 
+        this.automaticCandidateHandling(number, sudokuCell);
         sudokuCell.number = number;
 
         console.log("error count:", this.errorCount);

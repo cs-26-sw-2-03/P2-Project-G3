@@ -173,7 +173,7 @@ export class SudokuRenderer {
 
             if (sudokuCell.cellColour != "#ffffff") sudokuCell.htmlColourCell.style.backgroundColor = `var(--cell-color-${sudokuCell.cellColour})`;
 
-                this.renderCandidateBlock(sudokuCell.candidateBlock, this.board.notationMode);
+                this.renderCandidateBlock(sudokuCell.candidateBlock);
             }
         }
     }
@@ -182,8 +182,7 @@ export class SudokuRenderer {
      * This function renders the candidate notation for the currently selected cell.
      * It updates both corner and center notation.
      */
-    renderCandidateBlock() {
-        let candidateBlock = this.board.targetCell.candidateBlock;
+    renderCandidateBlock(candidateBlock) {
         this.renderCornerNotation(candidateBlock);
         this.renderCenterNotation(candidateBlock);
     }

@@ -54,7 +54,7 @@ export class InputController {
         this.board.targetCell.candidateBlock.insertCandidate(e.key);
       }
     }
-
+    
     this.renderer.renderCells();
   }
 
