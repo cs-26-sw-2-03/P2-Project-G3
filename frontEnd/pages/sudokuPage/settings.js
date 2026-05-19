@@ -2,13 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const visibleTimerToggle = document.getElementById("visible-timer-toggle");
     const highlightToggle = document.getElementById("highlight-toggle");
     const timerText = document.getElementById("timer-id");
+    const autoCandidateToggle = document.getElementById("auto-candidate-toggle");
 
     let timerVisible = true;
     let highlightVisible = true;
+    let autoCandidate = true;
 
     window.sudokuSettings = {
         visibleTimer: true,
-        highlight: true
+        highlight: true,
+        autoCandidate: true
     };
 
     function setSwitch(toggle, isOn) {
@@ -41,6 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 }
 
+    function applyAutoCandidate() {
+        window.sudokuSettings.autoCandidate = autoCandidate;
+
+        setSwitch(autoCandidateToggle, autoCandidate);
+
+        console.log(`Auto candidate toggle has been pressed, it is now ${autoCandidate}`);
+    }
+
     visibleTimerToggle.addEventListener("click", (e) => {
         e.preventDefault();
         timerVisible = !timerVisible;
@@ -55,6 +66,15 @@ document.addEventListener("DOMContentLoaded", () => {
         applyHighlight();
     });
 
+    autoCandidateToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        autoCandidate = !autoCandidate;
+
+        applyAutoCandidate();
+    });
+
     applyTimer();
     applyHighlight();
+    applyAutoCandidate();
 });
