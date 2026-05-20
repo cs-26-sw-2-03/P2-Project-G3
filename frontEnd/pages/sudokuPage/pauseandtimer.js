@@ -14,6 +14,7 @@ export function formatTime(totalSeconds) {
 
 
 // The code below runs when the site has been loaded.
+if (typeof document !== "undefined") {
 document.addEventListener("DOMContentLoaded", () => {
     let timerSeconds = 0;
     let timerInterval = null;
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timerDisplay.textContent = formatTime(timerSeconds);
     showOverlay();
 });
+}
 
 /**
 * this function returns the time from the timer in seconds

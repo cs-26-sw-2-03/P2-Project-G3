@@ -172,9 +172,9 @@ export class SudokuBoard {
         if (!this.misplacedNumberInBoard()) this.clearErrorTrackingProperties();
         this.updateErrorState(sudokuCell, number);
 
-        if (window.sudokuSettings.autoCandidate) {
+        if (typeof window !== "undefined" && window.sudokuSettings?.autoCandidate) {
         this.automaticCandidateHandling(number, sudokuCell);
-        }
+    }
         sudokuCell.number = number;
 
         console.log("error count:", this.errorCount);
