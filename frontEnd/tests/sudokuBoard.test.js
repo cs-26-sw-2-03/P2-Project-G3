@@ -1,6 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
 import { SudokuBoard } from "../pages/sudokuPage/sudokuBoard.js";
 
+globalThis.window = {
+    sudokuSettings: {
+        autoCandidate: false,
+    },
+};
+
 function makeCells(number = null) {
     return Array.from({ length: 9 }, (_, rowIndex) =>
         Array.from({ length: 9 }, (_, columnIndex) => ({
